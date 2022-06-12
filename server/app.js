@@ -15,7 +15,7 @@ const randint = (min,max) => {
 }
 
 const randID = () => {
-	timelog('Generating random ID')
+	console.log('Generating random ID')
 	let id = ''
 
 	while (true) {
@@ -23,7 +23,7 @@ const randID = () => {
 			const newInt = randint(0, 9)
 			id = `${id}${newInt}`
 		}
-		timelog(id)
+		console.log(id)
 		if (!(id in connectedNodes)) {
 			break
 		}
@@ -64,11 +64,14 @@ app.get('/connect', (req, res) => {
 		timelog('New node connected')
 		nodeID = randID()
 	}
-	console.log(`Node name: ${req.query.name}\nNode type: ${req.query.type}\nNode status: ${req.query.status}: ${statusMeanings[req.query.status]}`)
+	req.query.status = req.query.status.split('.')[0]
+	console.log(`Node name: ${req.query.name}\nNode type: ${req.query.type}\nNode posX: ${req.query.posx}\nNode posY: ${req.query.posy}\nNode status: ${req.query.status}: ${statusMeanings[req.query.status]}`)
 	connectedNodes[nodeID] = {
 		'name': req.query.name,
 		'type': req.query.type,
-		'status': req.query.status
+		'status': req.query.status,
+		'posx': req.query.posx,
+		'posy': req.query.posy
 	}
 	res.status(202)
 	res.send(`${nodeID}`)
